@@ -160,32 +160,41 @@
                 <input type="range" min="0" max="180" value="0" class="slider" id="servo5" oninput="send_data(4, this.value)">
                 <span class="slider-value" id="servo5-value">0°</span>
             </div>
+            <div class="slider-container" id="servo6-container">
+                <input type="range" min="0" max="180" value="0" class="slider" id="servo6" oninput="send_data(5, this.value)">
+                <span class="slider-value" id="servo6-value">0°</span>
+            </div>
         </div>
     </div>
 
+    <button id="open-all" onclick="openAllFingers()">Abrir Todos os Dedos</button>
+    <button id="close-all" onclick="closeAllFingers()">Fechar Todos os Dedos</button>
+
     <script>
-         const servoValues = document.querySelectorAll('.slider-value');
-
-         const socket = io();
-
-         const send_data = (motor, amnt) => {
+        const servoValues = document.querySelectorAll('.slider-value');
+    
+        const socket = io();
+    
+        const send_data = (motor, amnt) => {
             const all_movs = get_moveall_int();
-
-            servoValues[motor].textContent = `${amnt}°`;
-            servoValues[motor].style.transform = 'scale(1.2)';
+            const valueElement = document.getElementById(`servo${motor + 1}-value`);
+    
+            valueElement.textContent = `${amnt}°`;
+            valueElement.style.transform = `rotate(${valueElement.dataset.rotation}) scale(1.2)`;
+    
             setTimeout(() => {
-                servoValues[motor].style.transform = 'scale(1)';
+                valueElement.style.transform = `rotate(${valueElement.dataset.rotation}) scale(1)`;
             }, 200);
-
+    
             console.log(motor + ':' + amnt);
-
+    
             socket.emit('mov', {
                 'motor': motor,
                 'amnt': amnt,
                 'mov_all': all_movs
             });
         };
-
+    
         const get_moveall_int = () => {
             let m = 0;
             for (let i = 0; i < 6; i++) {
@@ -196,6 +205,22 @@
             }
             return m;
         };
-    </script>
+
+        function closeAllFingers() {
+            for (let i = 0; i < 5; i++) { 
+                const slider = document.getElementById(`servo${i + 1}`);
+                slider.value = 180; 
+                send_data(i, 180);
+            }
+        }
+
+        function openAllFingers() {
+            for (let i = 0; i < 5; i++) { 
+                const slider = document.getElementById(`servo${i + 1}`);
+                slider.value = 0; 
+                send_data(i, 0);
+            }
+        }
+    </script>    
 </body>
 </html>

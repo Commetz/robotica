@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Controle de Mão Robótica</title>
     <style>
         body {
@@ -14,8 +14,6 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            overscroll-behavior: none;
-            overflow: hidden;
             touch-action: none;
         }
 
@@ -171,7 +169,7 @@
                 font-size: 14px;
             }
 
-            #servo1-container { top: 85px; left: 51px; transform: rotate(-189deg); }
+            #servo1-container { top: 85px; left: 45px; transform: rotate(-189deg); }
             #servo2-container { top: 75px; left: 90px; transform: rotate(-180deg); }
             #servo3-container { top: 85px; left: 135px; transform: rotate(-169deg); }
             #servo4-container { top: 105px; left: 175px; transform: rotate(-160deg); }

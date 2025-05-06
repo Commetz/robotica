@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Mão Robótica</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(circle, #0a0a0a, #1c1c1c);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    
+        .container {
+            text-align: center;
+            position: relative;
+        }
+    
+        .hand-container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+        }
+    
+        .hand-image {
+            position: center;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0px 0px 10px rgba(0, 255, 255, 0.5));
+        }
+    
+        .slider-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .slider {
+            appearance: none;
+            width: 130px;
+            height: 8px;
+            background: linear-gradient(90deg, #0ff, #00f);
+            border-radius: 5px;
+            outline: none;
+            transform: rotate(-90deg);
+            cursor: pointer;
+            opacity: 0.9;
+            transition: 0.3s;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+    
+        .slider:hover {
+            opacity: 1;
+            transform: rotate(-90deg) scale(1.1);
+        }
+    
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border: 2px solid #0ff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px cyan;
+        }
+    
+        .slider-value {
+            margin-top: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+            transition: transform 0.2s ease-in-out;
+            transform: rotate(0deg);
+        }
+    
+        /* Posição dos sliders */
+        #servo1-container { top: 125px; left: 91px; transform: rotate(-189deg); }
+        #servo2-container { top: 110px; left: 147px; transform: rotate(-180deg); }
+        #servo3-container { top: 125px; left: 201px; transform: rotate(-169deg); }
+        #servo4-container { top: 155px; left: 250px; transform: rotate(-160deg); }
+        #servo5-container { top: 245px; left: 35px; transform: rotate(-220deg); }
+    
+        #servo1-value { transform: rotate(189deg); }
+        #servo2-value { transform: rotate(180deg); }
+        #servo3-value { transform: rotate(169deg); }
+        #servo4-value { transform: rotate(160deg); }
+        #servo5-value { transform: rotate(220deg); }
+    
+        /* RESPONSIVIDADE PARA CELULARES */
+        @media (max-width: 600px) {
+            body {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+                height: auto;
+            }
+    
+            .hand-container {
+                width: 280px;
+                height: 350px;
+            }
+    
+            .slider {
+                width: 90px;
+            }
+    
+            .slider-value {
+                font-size: 14px;
+            }
+    
+            #servo1-container { top: 85px; left: 60px; transform: rotate(-189deg); }
+            #servo2-container { top: 75px; left: 100px; transform: rotate(-180deg); }
+            #servo3-container { top: 85px; left: 140px; transform: rotate(-169deg); }
+            #servo4-container { top: 105px; left: 175px; transform: rotate(-160deg); }
+            #servo5-container { top: 165px; left: 20px; transform: rotate(-220deg); }
+    
+            #servo1-value { transform: rotate(189deg); }
+            #servo2-value { transform: rotate(180deg); }
+            #servo3-value { transform: rotate(169deg); }
+            #servo4-value { transform: rotate(160deg); }
+            #servo5-value { transform: rotate(220deg); }
+        }
+    </style>    
+    <script src="socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="hand-container">
+            <!-- Imagem da mão robótica -->
+            <img src="mao.png" alt="Mão Robótica" class="hand-image">
+            
+            <!-- Sliders para os dedos -->
+            <div class="slider-container" id="servo1-container">
+                <input type="range" min="0" max="180" value="0" class="slider" id="servo1" oninput="send_data(0, this.value)">
+                <span class="slider-value" id="servo1-value">0°</span>
+            </div>
+            <div class="slider-container" id="servo2-container">
+                <input type="range" min="0" max="180" value="0" class="slider" id="servo2" oninput="send_data(1, this.value)">
+                <span class="slider-value" id="servo2-value">0°</span>
+            </div>
+            <div class="slider-container" id="servo3-container">
+                <input type="range" min="0" max="180" value="0" class="slider" id="servo3" oninput="send_data(2, this.value)">
+                <span class="slider-value" id="servo3-value">0°</span>
+            </div>
+            <div class="slider-container" id="servo4-container">
+                <input type="range" min="0" max="180" value="0" class="slider" id="servo4" oninput="send_data(3, this.value)">
+                <span class="slider-value" id="servo4-value">0°</span>
+            </div>
+            <div class="slider-container" id="servo5-container">
+                <input type="range" min="0" max="180" value="0" class="slider" id="servo5" oninput="send_data(4, this.value)">
+                <span class="slider-value" id="servo5-value">0°</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+         const servoValues = document.querySelectorAll('.slider-value');
+
+         const socket = io();
+
+         const send_data = (motor, amnt) => {
+            const all_movs = get_moveall_int();
+
+            servoValues[motor].textContent = `${amnt}°`;
+            servoValues[motor].style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                servoValues[motor].style.transform = 'scale(1)';
+            }, 200);
+
+            console.log(motor + ':' + amnt);
+
+            socket.emit('mov', {
+                'motor': motor,
+                'amnt': amnt,
+                'mov_all': all_movs
+            });
+        };
+
+        const get_moveall_int = () => {
+            let m = 0;
+            for (let i = 0; i < 6; i++) {
+                const checkbox = document.getElementById(`checkbox${i + 1}`);
+                if (checkbox && checkbox.checked) {
+                    m |= (1 << i);
+                }
+            }
+            return m;
+        };
+    </script>
+</body>
+</html>

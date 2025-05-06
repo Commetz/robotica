@@ -138,22 +138,6 @@
             background: linear-gradient(90deg, #669900, #666600);
         }
 
-        
-        /* Posicionamento correto dos sliders em relação aos dedos */
-        #servo1-container { top: 125px; left: 91px; transform: rotate(-189deg); }  /* Indicador */
-        #servo2-container { top: 110px; left: 147px; transform: rotate(-180deg); } /* Médio */
-        #servo3-container { top: 125px; left: 201px; transform: rotate(-169deg); }  /* Anelar */
-        #servo4-container { top: 155px; left: 250px; transform: rotate(-160deg); } /* Mínimo */
-        #servo5-container { top: 245px; left: 35px; transform: rotate(-220deg); } /* Polegar */
-        #servo6-container { top: 357px; left: 150px; transform: rotate(90deg);} /* Pulso */
-
-        #servo1-value { transform: rotate(189deg); }
-        #servo2-value { transform: rotate(180deg); }
-        #servo3-value { transform: rotate(169deg); }
-        #servo4-value { transform: rotate(160deg); }
-        #servo5-value { transform: rotate(220deg); }
-        #servo6-value { transform: rotate(-90deg); }
-
         /* RESPONSIVIDADE PARA CELULARES */
         @media (max-width: 600px) {
             body {
@@ -171,6 +155,7 @@
             }
     
             .hand-container {
+                position: relative;
                 width: 280px;
                 height: 350px;
             }
@@ -190,6 +175,21 @@
             .slider-value {
                 font-size: 14px;
             }
+
+            /* Posicionamento correto dos sliders em relação aos dedos */
+            #servo1-container { top: 125px; left: 91px; transform: rotate(-189deg); }  /* Indicador */
+            #servo2-container { top: 110px; left: 147px; transform: rotate(-180deg); } /* Médio */
+            #servo3-container { top: 125px; left: 201px; transform: rotate(-169deg); }  /* Anelar */
+            #servo4-container { top: 155px; left: 250px; transform: rotate(-160deg); } /* Mínimo */
+            #servo5-container { top: 245px; left: 35px; transform: rotate(-220deg); } /* Polegar */
+            #servo6-container { top: 357px; left: 150px; transform: rotate(90deg);} /* Pulso */
+            
+            #servo1-value { transform: rotate(189deg); }
+            #servo2-value { transform: rotate(180deg); }
+            #servo3-value { transform: rotate(169deg); }
+            #servo4-value { transform: rotate(160deg); }
+            #servo5-value { transform: rotate(220deg); }
+            #servo6-value { transform: rotate(-90deg); }
         }
 
     </style>

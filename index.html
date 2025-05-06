@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -16,18 +15,18 @@
             height: 100vh;
             margin: 0;
         }
-    
+
         .container {
             text-align: center;
             position: relative;
         }
-    
+
         .hand-container {
             position: relative;
             width: 400px;
             height: 500px;
         }
-    
+
         .hand-image {
             position: center;
             width: 100%;
@@ -35,14 +34,14 @@
             object-fit: contain;
             filter: drop-shadow(0px 0px 10px rgba(0, 255, 255, 0.5));
         }
-    
+
         .slider-container {
             position: absolute;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-    
+
         .slider {
             appearance: none;
             width: 130px;
@@ -56,12 +55,12 @@
             transition: 0.3s;
             box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
-    
+
         .slider:hover {
             opacity: 1;
             transform: rotate(-90deg) scale(1.1);
         }
-    
+
         .slider::-webkit-slider-thumb {
             appearance: none;
             width: 18px;
@@ -72,7 +71,7 @@
             cursor: pointer;
             box-shadow: 0 0 5px cyan;
         }
-    
+
         .slider-value {
             margin-top: 5px;
             font-size: 18px;
@@ -80,22 +79,81 @@
             color: #0ff;
             text-shadow: 0 0 5px #0ff;
             transition: transform 0.2s ease-in-out;
-            transform: rotate(0deg);
+            transform: rotate(0deg); /* Removido o efeito de rotação */
         }
-    
-        /* Posição dos sliders */
-        #servo1-container { top: 125px; left: 91px; transform: rotate(-189deg); }
-        #servo2-container { top: 110px; left: 147px; transform: rotate(-180deg); }
-        #servo3-container { top: 125px; left: 201px; transform: rotate(-169deg); }
-        #servo4-container { top: 155px; left: 250px; transform: rotate(-160deg); }
-        #servo5-container { top: 245px; left: 35px; transform: rotate(-220deg); }
-    
+
+        #close-all {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(90deg, #ff0000, #cc0000);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            transition: all 0.3s ease-in-out;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        #close-all:hover {
+            background: linear-gradient(90deg, #cc0000, #990000);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+            transform: scale(1.1);
+        }
+
+        #close-all:active {
+            transform: scale(0.95);
+            background: linear-gradient(90deg, #990000, #660000);
+        }
+
+        #open-all {
+            position: absolute;
+            bottom: 100px;
+            right: 20px;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(90deg, #66ff00, #66cc00);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+            transition: all 0.3s ease-in-out;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+        
+        #open-all:hover {
+            background: linear-gradient(90deg, #66cc00, #669900);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 1);
+            transform: scale(1.1);
+        }
+
+        #open-all:active {
+            transform: scale(0.95);
+            background: linear-gradient(90deg, #669900, #666600);
+        }
+
+        
+        /* Posicionamento correto dos sliders em relação aos dedos */
+        #servo1-container { top: 125px; left: 91px; transform: rotate(-189deg); }  /* Indicador */
+        #servo2-container { top: 110px; left: 147px; transform: rotate(-180deg); } /* Médio */
+        #servo3-container { top: 125px; left: 201px; transform: rotate(-169deg); }  /* Anelar */
+        #servo4-container { top: 155px; left: 250px; transform: rotate(-160deg); } /* Mínimo */
+        #servo5-container { top: 245px; left: 35px; transform: rotate(-220deg); } /* Polegar */
+        #servo6-container { top: 357px; left: 150px; transform: rotate(90deg);} /* Pulso */
+
         #servo1-value { transform: rotate(189deg); }
         #servo2-value { transform: rotate(180deg); }
         #servo3-value { transform: rotate(169deg); }
         #servo4-value { transform: rotate(160deg); }
         #servo5-value { transform: rotate(220deg); }
-    
+        #servo6-value { transform: rotate(-90deg); }
+
         /* RESPONSIVIDADE PARA CELULARES */
         @media (max-width: 600px) {
             body {
@@ -117,20 +175,9 @@
             .slider-value {
                 font-size: 14px;
             }
-    
-            #servo1-container { top: 85px; left: 60px; transform: rotate(-189deg); }
-            #servo2-container { top: 75px; left: 100px; transform: rotate(-180deg); }
-            #servo3-container { top: 85px; left: 140px; transform: rotate(-169deg); }
-            #servo4-container { top: 105px; left: 175px; transform: rotate(-160deg); }
-            #servo5-container { top: 165px; left: 20px; transform: rotate(-220deg); }
-    
-            #servo1-value { transform: rotate(189deg); }
-            #servo2-value { transform: rotate(180deg); }
-            #servo3-value { transform: rotate(169deg); }
-            #servo4-value { transform: rotate(160deg); }
-            #servo5-value { transform: rotate(220deg); }
         }
-    </style>    
+
+    </style>
     <script src="socket.io.min.js"></script>
 </head>
 <body>
